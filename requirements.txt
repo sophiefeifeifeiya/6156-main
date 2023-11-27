@@ -1,5 +1,3 @@
 fastapi
 httpx
-asyncio
-logging
 uvicorn
