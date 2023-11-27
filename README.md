@@ -10,7 +10,6 @@ uvicorn main:app --reload
 
 Go to http://127.0.0.1:8000/aggregate/async
 
-
 Go to http://127.0.0.1:8000/aggregate/sync
 
 ## Deployed server

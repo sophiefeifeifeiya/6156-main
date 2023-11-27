@@ -7,18 +7,22 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-ADOPTER_SERVICE = "http://52.90.231.152/"
+ADOPTER_SERVICE = "http://54.221.125.163/"
 PET_SERVICE = "http://52.0.17.143:8012/"
 PET_OWNER_SERVICE = "http://54.92.182.247:8012/"
 
-
 app = FastAPI()
 
+
 async def fetch_data(client, url, service_name):
-    response = await client.get(url)
-    logger.info(f"Received response from {service_name} Service")
-    return response.json()
+    try:
+        response = await client.get(url)
+        logger.info(f"Received response from {service_name} Service")
+        return response.json()
+    except httpx.RequestError as e:
+        logger.error(f"An error occurred while requesting {service_name} Service: {e}")
+        return {}
+
 
 @app.get("/aggregate/sync")
 def aggregate_sync():
@@ -31,13 +35,12 @@ def aggregate_sync():
 
         pet_owner_data = client.get(PET_OWNER_SERVICE).json()
         logger.info("Received response from Pet Owner Service")
-    
+
     return {
         "adopter": adopter_data,
         "pet": pet_data,
         "pet_owner": pet_owner_data
     }
-
 
 
 @app.get("/aggregate/async")
@@ -54,4 +57,3 @@ async def aggregate_async():
             results.append(await asyncio.gather(*tasks))
 
         return results
-
