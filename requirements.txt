@@ -1,6 +1,5 @@
 fastapi
 httpx
 asyncio
-random
 logging
 uvicorn
